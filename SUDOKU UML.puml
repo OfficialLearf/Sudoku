@@ -1,0 +1,120 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class Main {
+  static Difficulty[] buttonLabels
+  setMainPanel()
+  buttons() 
+  makePanels()
+  setPanelContent()
+  main(String[] args)
+}
+
+class MenuButton {
+  CardLayout panelLayout
+  JPanel panel
+  MenuButton(String name, Dimension dimension, CardLayout panelLayout, JPanel panel, JFrame frame)
+}
+
+class Sudoku {
+  JFrame frame
+  JPanel boardPanel
+  Main.Difficulty difficulty
+  Board board
+  boolean isWon
+  boolean isLoadedGame
+  JProgressBar progressBar
+  JLabel finalScore
+  GameHelper gameHelper
+  int elapsedTime
+  Sudoku(Board board, boolean isLoadedGame)
+  setFrame()
+  initializeBoard(Board board)
+  showWinMessage()
+  restartGame(JPanel panel, JFrame frame)
+  saveGame()
+  calculateProgressPercentage()
+}
+
+class SudokuDocumentFilter {
+  int maxNumber
+  SudokuDocumentFilter(int maxNumber)
+  insertString()
+  replace()
+  isValidInput()
+}
+
+class GameHelper {
+  Board board
+  JFrame frame
+  JPanel boardPanel
+  int elapsedTime
+  int score
+  int helpCount
+  Timer timer
+  GameHelper(Board board, JFrame frame, JPanel boardPanel, int elapsedTime)
+  startTimer()
+  stopTimer()
+  updateTimerLabel()
+  provideHelp(Board board)
+  updateCellUI(int row, int col, int value)
+  updateScore()
+  updateScoreLabel()
+  getScore()
+  getTime()
+}
+
+class Board {
+  int[][] board
+  boolean isWon
+  Main.Difficulty difficulty
+  int[][] solvedBoard
+  int elapsedTime
+  Board(int size)
+  setCell(int row, int col, int value)
+  setElapsedTime(int time)
+  getElapsedTime()
+  getSolvedBoardCell(int row, int col)
+  getCell(int row, int col)
+  getRow(int row)
+  getDifficulty()
+  setDifficulty(Main.Difficulty difficulty)
+  getColumn(int col)
+  getSubgrid(Board board, int row, int col)
+  isValid(Board board, int row, int col, int value)
+  solve(Board board, int row, int col)
+  generateRandomNumbers(int size)
+  calculateCellsToRemove(int boardSize, Main.Difficulty difficulty)
+  generateSudoku(int size, Main.Difficulty difficulty)
+  createBoard(Board board, Main.Difficulty difficulty)
+  isBoardFilledAndValid(Board board)
+  saveBoard(String filename)
+  loadBoard(String filename)
+}
+
+class PanelMethods {
+  JPanel panel
+  PanelMethods(JPanel panel)
+  setMainMenu()
+  setNewGame(JFrame frame)
+  setLoadGame(JFrame currentWindow)
+  loadGame(File selectedFile, JFrame currentWindow)
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+Main "1" -- "*" MenuButton : creates >
+Sudoku "1" -- "1" Board : uses >
+Sudoku "1" -- "1" GameHelper : uses >
+Sudoku "1" -- "1" SudokuDocumentFilter : validates input >
+GameHelper "1" -- "1" Board : uses >
+GameHelper "1" -- "1" JFrame : uses >
+GameHelper "1" -- "1" JPanel : uses >
+Board "1" -- "1" Sudoku : used by >
+PanelMethods "1" -- "1" JPanel : uses >
+PanelMethods "1" -- "1" Sudoku : starts new game, loads game >
+@enduml
